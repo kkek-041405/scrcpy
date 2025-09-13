@@ -1,0 +1,12 @@
+{
+  "f7": {"type": "touch", "x": 960, "y": 1800},
+  "f8": {"type": "touch", "x": 860, "y": 1800},
+  "f9": {"type": "touch", "x": 1060, "y": 1800},
+  "f10": {"type": "touch", "x": 540, "y": 1800},
+  "f11": {"type": "touch", "x": 1420, "y": 1800},
+  "f12": {"type": "touch", "x": 960, "y": 1700},
+  "up": {"type": "touch", "x": 960, "y": 1600},
+  "down": {"type": "touch", "x": 960, "y": 1900},
+  "left": {"type": "touch", "x": 100, "y": 1200},
+  "right": {"type": "touch", "x": 1820, "y": 1200}
+}

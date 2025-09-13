@@ -1,0 +1,13 @@
+{
+  "q": {"type": "key", "key": "up"},
+  "z": {"type": "key", "key": "down"},
+  "o": {"type": "key", "key": "left"},
+  "p": {"type": "key", "key": "right"},
+  "m": {"type": "key", "key": "space"},
+  "k": {"type": "key", "key": "return"},
+  "l": {"type": "key", "key": "escape"},
+  "i": {"type": "touch", "x": 1800, "y": 200},
+  "u": {"type": "touch", "x": 1700, "y": 300},
+  "y": {"type": "touch", "x": 1600, "y": 400},
+  "t": {"type": "touch", "x": 1500, "y": 500}
+}

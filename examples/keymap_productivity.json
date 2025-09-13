@@ -1,0 +1,16 @@
+{
+  "f1": {"type": "key", "key": "home"},
+  "f2": {"type": "key", "key": "end"},
+  "f3": {"type": "key", "key": "pageup"},
+  "f4": {"type": "key", "key": "pagedown"},
+  "f5": {"type": "touch", "x": 100, "y": 100},
+  "f6": {"type": "touch", "x": 200, "y": 100},
+  "f7": {"type": "touch", "x": 300, "y": 100},
+  "f8": {"type": "touch", "x": 400, "y": 100},
+  "f9": {"type": "key", "key": "return"},
+  "f10": {"type": "key", "key": "escape"},
+  "f11": {"type": "key", "key": "backspace"},
+  "f12": {"type": "key", "key": "delete"},
+  "capslock": {"type": "disable"},
+  "scrolllock": {"type": "disable"}
+}

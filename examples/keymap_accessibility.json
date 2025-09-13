@@ -1,0 +1,15 @@
+{
+  "tab": {"type": "key", "key": "down"},
+  "return": {"type": "key", "key": "space"},
+  "space": {"type": "key", "key": "return"},
+  "backspace": {"type": "key", "key": "escape"},
+  "delete": {"type": "key", "key": "backspace"},
+  "home": {"type": "touch", "x": 100, "y": 100},
+  "end": {"type": "touch", "x": 1820, "y": 2200},
+  "pageup": {"type": "key", "key": "up"},
+  "pagedown": {"type": "key", "key": "down"},
+  "up": {"type": "key", "key": "pageup"},
+  "down": {"type": "key", "key": "pagedown"},
+  "left": {"type": "key", "key": "home"},
+  "right": {"type": "key", "key": "end"}
+}

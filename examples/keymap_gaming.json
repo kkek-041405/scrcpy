@@ -1,0 +1,15 @@
+{
+  "w": {"type": "key", "key": "up"},
+  "a": {"type": "key", "key": "left"},
+  "s": {"type": "key", "key": "down"},
+  "d": {"type": "key", "key": "right"},
+  "space": {"type": "touch", "x": 960, "y": 540},
+  "e": {"type": "key", "key": "return"},
+  "q": {"type": "key", "key": "escape"},
+  "r": {"type": "touch", "x": 1800, "y": 200},
+  "f": {"type": "touch", "x": 1700, "y": 300},
+  "c": {"type": "touch", "x": 1600, "y": 400},
+  "x": {"type": "touch", "x": 1500, "y": 500},
+  "tab": {"type": "disable"},
+  "capslock": {"type": "disable"}
+}
