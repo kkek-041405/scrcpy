@@ -113,6 +113,8 @@ const struct scrcpy_options scrcpy_options_default = {
     .angle = NULL,
     .vd_destroy_content = true,
     .vd_system_decorations = true,
+    .keymap_path = NULL,
+    .toggle_mapping_key = NULL,
 };
 
 enum sc_orientation

@@ -22,6 +22,8 @@ src = [
     'src/fps_counter.c',
     'src/frame_buffer.c',
     'src/input_manager.c',
+    'src/keymap.c',
+    'src/keymap_processor.c',
     'src/keyboard_sdk.c',
     'src/mouse_capture.c',
     'src/mouse_sdk.c',
@@ -267,6 +269,13 @@ if get_option('buildtype') == 'debug'
         ]],
         ['test_vector', [
             'tests/test_vector.c',
+        ]],
+        ['test_keymap', [
+            'tests/test_keymap.c',
+            'src/keymap.c',
+            'src/util/log.c',
+            'src/util/str.c',
+            'src/util/strbuf.c',
         ]],
     ]
 

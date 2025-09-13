@@ -327,6 +327,8 @@ struct scrcpy_options {
     const char *start_app;
     bool vd_destroy_content;
     bool vd_system_decorations;
+    const char *keymap_path;
+    const char *toggle_mapping_key;
 };
 
 extern const struct scrcpy_options scrcpy_options_default;

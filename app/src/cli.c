@@ -114,6 +114,8 @@ enum {
     OPT_NO_VD_SYSTEM_DECORATIONS,
     OPT_NO_VD_DESTROY_CONTENT,
     OPT_DISPLAY_IME_POLICY,
+    OPT_KEYMAP,
+    OPT_TOGGLE_MAPPING_KEY,
 };
 
 struct sc_option {
@@ -486,6 +488,16 @@ static const struct sc_option options[] = {
                 "This option is only available when a HID keyboard is enabled "
                 "(or a physical keyboard is connected).\n"
                 "Also see --mouse and --gamepad.",
+    },
+    {
+        .longopt_id = OPT_KEYMAP,
+        .longopt = "keymap",
+        .argdesc = "file",
+        .text = "Specify a keymap configuration file to customize keyboard "
+                "inputs. Keys defined in the mapping will be processed "
+                "according to the configuration instead of the default "
+                "behavior.\n"
+                "See documentation for keymap file format.",
     },
     {
         .longopt_id = OPT_KILL_ADB_ON_CLOSE,
@@ -920,6 +932,16 @@ static const struct sc_option options[] = {
         .longopt = "time-limit",
         .argdesc = "seconds",
         .text = "Set the maximum mirroring time, in seconds.",
+    },
+    {
+        .longopt_id = OPT_TOGGLE_MAPPING_KEY,
+        .longopt = "toggle-mapping-key",
+        .argdesc = "key",
+        .text = "Specify a key to toggle keymap mode on/off at runtime. "
+                "The key should be specified as a keycode name (e.g., 'F12', "
+                "'ScrollLock'). When pressed, this key will enable or disable "
+                "key mapping functionality.\n"
+                "Only works when --keymap is specified.",
     },
     {
         .longopt_id = OPT_TUNNEL_HOST,
@@ -2413,6 +2435,9 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
                     return false;
                 }
                 break;
+            case OPT_KEYMAP:
+                opts->keymap_path = optarg;
+                break;
             case OPT_HID_KEYBOARD_DEPRECATED:
                 LOGE("--hid-keyboard has been removed, use --keyboard=aoa or "
                      "--keyboard=uhid instead.");
@@ -2752,6 +2777,9 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
                 if (!parse_time_limit(optarg, &opts->time_limit)) {
                     return false;
                 }
+                break;
+            case OPT_TOGGLE_MAPPING_KEY:
+                opts->toggle_mapping_key = optarg;
                 break;
             case OPT_PAUSE_ON_EXIT:
                 if (!parse_pause_on_exit(optarg, &args->pause_on_exit)) {

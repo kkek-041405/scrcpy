@@ -22,6 +22,8 @@
 #include "events.h"
 #include "file_pusher.h"
 #include "keyboard_sdk.h"
+#include "keymap.h"
+#include "keymap_processor.h"
 #include "mouse_sdk.h"
 #include "recorder.h"
 #include "screen.h"
@@ -89,6 +91,10 @@ struct scrcpy {
 #endif
     };
     struct sc_timeout timeout;
+    
+    // Key mapping support
+    struct sc_keymap keymap;
+    struct sc_keymap_processor keymap_processor;
 };
 
 #ifdef _WIN32
@@ -416,6 +422,30 @@ scrcpy(struct scrcpy_options *options) {
     bool screen_initialized = false;
     bool timeout_initialized = false;
     bool timeout_started = false;
+
+    // Initialize keymap if configured
+    sc_keymap_init(&s->keymap);
+    bool keymap_loaded = false;
+    if (options->keymap_path) {
+        if (sc_keymap_load_from_file(&s->keymap, options->keymap_path)) {
+            keymap_loaded = true;
+            LOGI("Keymap loaded from: %s", options->keymap_path);
+            
+            // Set toggle key if configured
+            if (options->toggle_mapping_key) {
+                enum sc_keycode toggle_key = sc_keymap_parse_toggle_key(options->toggle_mapping_key);
+                if (toggle_key != SC_KEYCODE_UNKNOWN) {
+                    s->keymap.toggle_key = toggle_key;
+                    s->keymap.toggle_enabled = true;
+                    LOGI("Toggle mapping key set to: %s", options->toggle_mapping_key);
+                } else {
+                    LOGW("Invalid toggle mapping key: %s", options->toggle_mapping_key);
+                }
+            }
+        } else {
+            LOGE("Failed to load keymap from: %s", options->keymap_path);
+        }
+    }
 
     struct sc_acksync *acksync = NULL;
 
@@ -764,6 +794,23 @@ aoa_complete:
             uhid_keyboard = &s->keyboard_uhid;
         }
 
+        // Wrap key processor with keymap processor if keymap is loaded
+        if (keymap_loaded && kp) {
+            struct sc_keymap_processor_params keymap_params = {
+                .keymap = &s->keymap,
+                .original_kp = kp,
+                .mp = mp, // Will be set properly after mouse processor init
+                .screen = NULL, // Will be set later when screen is available
+            };
+            
+            if (sc_keymap_processor_init(&s->keymap_processor, &keymap_params)) {
+                kp = &s->keymap_processor.key_processor;
+                LOGI("Key processor wrapped with keymap processor");
+            } else {
+                LOGW("Failed to initialize keymap processor");
+            }
+        }
+
         if (options->mouse_input_mode == SC_MOUSE_INPUT_MODE_SDK) {
             sc_mouse_sdk_init(&s->mouse_sdk, &s->controller,
                               options->mouse_hover);
@@ -774,6 +821,11 @@ aoa_complete:
                 goto end;
             }
             mp = &s->mouse_uhid.mouse_processor;
+        }
+
+        // Update keymap processor with mouse processor if it was initialized
+        if (keymap_loaded && kp == &s->keymap_processor.key_processor && mp) {
+            s->keymap_processor.mp = mp;
         }
 
         if (options->gamepad_input_mode == SC_GAMEPAD_INPUT_MODE_UHID) {
@@ -830,6 +882,11 @@ aoa_complete:
             goto end;
         }
         screen_initialized = true;
+
+        // Update keymap processor with screen reference if it was initialized
+        if (keymap_loaded && kp == &s->keymap_processor.key_processor) {
+            s->keymap_processor.screen = &s->screen;
+        }
 
         if (options->video_playback) {
             struct sc_frame_source *src = &s->video_decoder.frame_source;
@@ -1063,6 +1120,12 @@ end:
     }
 
     sc_server_destroy(&s->server);
+
+    // Clean up keymap
+    if (keymap_loaded) {
+        sc_keymap_processor_destroy(&s->keymap_processor);
+    }
+    sc_keymap_destroy(&s->keymap);
 
     return ret;
 }
