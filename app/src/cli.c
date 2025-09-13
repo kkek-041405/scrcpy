@@ -97,6 +97,7 @@ enum {
     OPT_RECORD_ORIENTATION,
     OPT_ORIENTATION,
     OPT_KEYBOARD,
+    OPT_KEYMAP,
     OPT_MOUSE,
     OPT_HID_KEYBOARD_DEPRECATED,
     OPT_HID_MOUSE_DEPRECATED,
@@ -486,6 +487,12 @@ static const struct sc_option options[] = {
                 "This option is only available when a HID keyboard is enabled "
                 "(or a physical keyboard is connected).\n"
                 "Also see --mouse and --gamepad.",
+    },
+    {
+        .longopt_id = OPT_KEYMAP,
+        .longopt = "keymap",
+        .argdesc = "file",
+        .text = "Use a custom keymap file for keyboard input mapping.",
     },
     {
         .longopt_id = OPT_KILL_ADB_ON_CLOSE,
@@ -2412,6 +2419,9 @@ parse_args_with_getopt(struct scrcpy_cli_args *args, int argc, char *argv[],
                 if (!parse_keyboard(optarg, &opts->keyboard_input_mode)) {
                     return false;
                 }
+                break;
+            case OPT_KEYMAP:
+                opts->keymap_file = optarg;
                 break;
             case OPT_HID_KEYBOARD_DEPRECATED:
                 LOGE("--hid-keyboard has been removed, use --keyboard=aoa or "

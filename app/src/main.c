@@ -54,6 +54,10 @@ main_scrcpy(int argc, char *argv[]) {
 
     sc_set_log_level(args.opts.log_level);
 
+    if (args.opts.keymap_file) {
+        LOGI("Using keymap: %s", args.opts.keymap_file);
+    }
+
     if (args.help) {
         scrcpy_print_usage(argv[0]);
         ret = SCRCPY_EXIT_SUCCESS;
